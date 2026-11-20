@@ -60,7 +60,7 @@ export function gangBrain(p, dt) {
   const los = !lineBlocked(p.x, p.z, tx, tz, 2);
   const speed = p.kind === 'boss' ? 5.2 : 4.4;
   if (!los && d > 30) { navigate(p, tx, tz, speed * 1.1, dt); return; }
-  if (p.tacticT <= 0) {
+  if (!(p.tacticT > 0)) {
     p.tacticT = rng.range(1.6, 3.2);
     const r = rng.next();
     p.tactic = r < 0.45 ? 'cover' : r < 0.8 ? 'strafe' : 'peek';

@@ -95,6 +95,7 @@ export class Ped {
     this.y = groundHeight(this.x, this.z);
   }
   moveTo(tx, tz, speed, dt) {
+    if (!Number.isFinite(tx) || !Number.isFinite(tz)) return 0;
     const dx = tx - this.x, dz = tz - this.z, d = Math.hypot(dx, dz);
     if (d < 0.05) return 0;
     const s = Math.min(speed * dt, d);
@@ -187,7 +188,7 @@ export class Ped {
       x: this.x, y: this.y, z: this.z, yaw: -this.angle, look: this.look, walk: this.walk,
       speed: this.speedNow > 4 ? 2 : this.speedNow > 0.1 ? 1 : 0, aim: this.aiming ? 1 : 0, punch: this.punch,
       hit: this.hit, dead: this.dead || this.state === 'down' ? Math.max(this.deadT, 0.001) : 0,
-      weapon: this.weapon, phone: this.phone, gesture: this.state === 'chat' ? G.time + this.id : 0, breath: G.time * 2 + this.id,
+      weapon: this.weapon, phone: this.phone, gesture: this.state === 'chat' || this.talking ? G.time + this.id : 0, breath: G.time * 2 + this.id,
     });
   }
 }

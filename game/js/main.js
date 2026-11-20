@@ -48,6 +48,7 @@ function resize() {
 // ---------- shared helpers ----------
 G.addMoney = (n) => { G.money = Math.max(0, G.money + n); if (n > 0) G.stats.earned += n; };
 G.toast = (text, color = '#fff') => HUD.notify({ kind: 'toast', text, color });
+G.clearNotes = () => HUD.clearNotifications();
 G.banner = (title, sub = '', color = '#2ff3e0', time = 4, priority = 1) => HUD.notify({ kind: 'banner', title, sub, color, time, priority });
 G.help = (text, time = 0.15) => { G.ui.help = { text, t: time }; };
 G.slowMo = (dur) => { G.slowT = Math.max(G.slowT || 0, dur); };
@@ -61,6 +62,12 @@ G.bust = () => {
   G.mode = 'busted'; G.deathT = 0; G.stats.arrests++;
   if (G.player.vehicle) G.player.exitVehicle(true);
   sfx('cuffed'); Missions.onPlayerDown('You got cuffed.'); releasePointer();
+};
+G.collectMarkers = () => {
+  if (!G.player) return [];
+  const out = [...Side.markerList(), ...Missions.markerList()];
+  if (G.waypoint) out.push({ x: G.waypoint.x, z: G.waypoint.z, r: 1.2, h: 60, color: [0.8, 0.4, 1] });
+  return out;
 };
 G.onPointerLockLost = () => { if (G.mode === 'playing' && !G.debug.shot) { G.mode = 'paused'; Menus.open('pause'); } };
 
@@ -127,7 +134,7 @@ function tick(dt) {
       if (v.ai.mode === 'traffic') updateTrafficCar(v, dt);
       else if (v.ai.mode === 'chase' || v.ai.mode === 'leave' || v.ai.mode === 'block') updatePoliceCar(v, dt);
       else if (v.ai.mode === 'script' && v.ai.update) v.ai.update(v, dt);
-    } else if (!v.driver || !v.driver.isPlayer) { v.ctl.throttle = 0; v.ctl.brake = 0.6; v.ctl.steer = 0; v.ctl.handbrake = false; }
+    } else if (!v.driver || !v.driver.isPlayer) { v.ctl.throttle = 0; v.ctl.brake = 0; v.ctl.steer = 0; v.ctl.handbrake = true; }
     v.update(dt);
   }
   for (let i = 0; i < G.vehicles.length; i++) for (let j = i + 1; j < G.vehicles.length; j++) collideVehicles(G.vehicles[i], G.vehicles[j]);
@@ -172,8 +179,9 @@ function vehiclePedHits() {
 
 // ---------- title camera ----------
 const TITLE_SHOTS = [
-  { from: [398, 3, 470], to: [420, 9, 300], lookFrom: [420, 40, 300], lookTo: [450, 60, 180], dur: 26 },
-  { from: [520, 50, 640], to: [610, 30, 520], lookFrom: [470, 60, 380], lookTo: [480, 50, 360], dur: 26 },
+  { from: [424, 3.2, 650], to: [424, 9, 560], lookFrom: [445, 55, 380], lookTo: [450, 80, 360], dur: 28 },
+  { from: [250, 4, 527], to: [345, 12, 527], lookFrom: [460, 40, 500], lookTo: [470, 60, 420], dur: 26 },
+  { from: [640, 60, 700], to: [560, 35, 600], lookFrom: [470, 70, 380], lookTo: [460, 40, 360], dur: 26 },
 ];
 let titleShot = 0;
 function startTitleCamera() { titleShot = 0; playShot({ ...TITLE_SHOTS[0], fov: 55 }); }

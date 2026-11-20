@@ -88,7 +88,7 @@ export class Player {
   updateOnFoot(dt) {
     if (this.entering) { this.updateEntering(dt); return; }
     const locked = this.controlsLocked;
-    this.aiming = !locked && input.mouse.right && this.alive;
+    this.aiming = (!locked && input.mouse.right && this.alive) || !!this.forceAim;
     let f = 0, s = 0;
     if (!locked) { if (isDown('up')) f += 1; if (isDown('down')) f -= 1; if (isDown('right')) s += 1; if (isDown('left')) s -= 1; }
     const fx = Math.cos(rig.yaw), fz = Math.sin(rig.yaw), rx = -fz, rz = fx;

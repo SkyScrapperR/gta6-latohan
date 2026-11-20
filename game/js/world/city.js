@@ -87,7 +87,7 @@ export function groundHeight(x, z) {
 }
 export function beachHeight(z) {
   const t = (z - (CITY + 6)) / (LAND.z1 + 12 - (CITY + 6));
-  return t < 0.7 ? CURB + 0.02 - t * 0.5 : CURB + 0.02 - 0.35 - (t - 0.7) * 6;
+  return t < 0.7 ? CURB + 0.02 - t * 0.5 : CURB + 0.02 - 0.35 - (t - 0.7) * 7;
 }
 
 // ---------------------------------------------------------------------------

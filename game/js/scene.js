@@ -65,7 +65,8 @@ export function assembleScene(R, dt) {
       mat4.scale(m, m, 7, L, 7);
       R.beams.push({ mesh: beamMeshes.cone, model: m, color: [1, 1, 0.9], alpha: 0.22 + 0.25 * R.env.night, fadeTop: false });
     }
-    for (const mk of G.markers || []) {
+    G.markers = G.collectMarkers ? G.collectMarkers() : [];
+    for (const mk of G.markers) {
       const m = mat4.create(); mat4.trs(m, mk.x, mk.y || 0.15, mk.z, 0, mk.r, mk.h || 4, mk.r);
       R.beams.push({ mesh: beamMeshes.cylinder, model: m, color: mk.color, alpha: 0.9, fadeTop: true });
       G.markerLights.push({ x: mk.x, y: 1.5, z: mk.z, r: mk.r * 5, color: mk.color, intensity: 1.8 });

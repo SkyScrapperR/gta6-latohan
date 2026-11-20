@@ -16,7 +16,7 @@ void main() {
   float hx = wave(p.xz + vec2(e, 0), d1, 0.11, 0.35, 1.3) + wave(p.xz + vec2(e, 0), d2, 0.23, 0.18, 1.9) + wave(p.xz + vec2(e, 0), d3, 0.5, 0.06, 2.6);
   float hz = wave(p.xz + vec2(0, e), d1, 0.11, 0.35, 1.3) + wave(p.xz + vec2(0, e), d2, 0.23, 0.18, 1.9) + wave(p.xz + vec2(0, e), d3, 0.5, 0.06, 2.6);
   vNormal = normalize(vec3(h - hx, e, h - hz));
-  p.y = -0.45 + h;
+  p.y = -0.85 + h;
   vWorld = p;
   gl_Position = uViewProj * vec4(p, 1.0);
 }`;

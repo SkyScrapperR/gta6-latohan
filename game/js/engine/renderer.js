@@ -47,7 +47,7 @@ export class Renderer {
     this.particleCount = 0; this.additiveStart = 0;
     this.atlas = null;
     this.waterMesh = null; this.land = [0, 0, 1, 1];
-    this.post_ = { bloom: 1, threshold: 1.1, exposure: 1, saturation: 1.1, vignette: 0.35, blur: 0, grade: [1, 1, 1], lift: [0, 0, 0], desat: 0 };
+    this.post_ = { bloom: 0.9, threshold: 1.5, exposure: 1, saturation: 1.1, vignette: 0.35, blur: 0, grade: [1, 1, 1], lift: [0, 0, 0], desat: 0 };
     this.stats = { draws: 0, culled: 0 };
     this.initParticles();
     this.initWater();

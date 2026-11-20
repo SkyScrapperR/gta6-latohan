@@ -193,7 +193,7 @@ export class Vehicle {
     const tint = this.wrecked ? [0.07, 0.065, 0.06] : this.hp < this.maxHp * 0.5 ? this.color.map((c) => c * (0.55 + 0.45 * this.hp / (this.maxHp * 0.5))) : this.color;
     const night = R.env.night || 0;
     const ph = this.siren ? 1 + (Math.floor(G.time * 7) % 2) : 0;
-    R.dynamic.push({ mesh: vehicleMesh(this.model), model, tint, params: [this.wrecked ? 0 : (this.driver ? Math.max(night, 0.15) : 0), this.braking || this.reversing ? 1 : 0, ph, 0] });
+    R.dynamic.push({ mesh: vehicleMesh(this.model), model, tint, params: [this.wrecked ? 0 : (this.driver ? Math.max(night, 0.15) : 0), this.driver && (this.braking || this.reversing) ? 1 : 0, ph, 0] });
     const wd = WHEELS[this.model], s = wd.r / 0.34;
     const rear = wd.rear ?? -wd.x;
     for (const [lx, front] of [[wd.x, true], [rear, false]]) for (const side of [-1, 1]) {
