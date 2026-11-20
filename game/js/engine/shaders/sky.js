@@ -36,10 +36,10 @@ void main() {
   }
   // clouds
   if (dir.y > 0.0) {
-    vec2 cp = dir.xz / (dir.y + 0.12) * 1.4 + vec2(uTime * 0.004, uTime * 0.002);
+    vec2 cp = dir.xz / (dir.y + 0.3) * 1.6 + vec2(uTime * 0.004, uTime * 0.002);
     float c = smoothstep(0.45 - uCloud * 0.25, 0.85, fbm(cp));
     vec3 cc = mix(uHorizon * 1.15 + uSunCol * 0.15, uZenith * 0.6, 0.3) * (1.0 - uNight * 0.75);
-    col = mix(col, cc, c * 0.75 * smoothstep(0.0, 0.15, dir.y));
+    col = mix(col, cc, c * 0.7 * smoothstep(0.02, 0.3, dir.y));
   }
   frag = vec4(col, 1.0);
 }`;

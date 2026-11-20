@@ -81,7 +81,7 @@ void main() {
         float fres = pow(1.0 - max(dot(n, V), 0.0), 2.5);
         albedo = mix(vec3(0.05, 0.08, 0.11), uSkyCol * 0.55, 0.25 + 0.6 * fres);
         reflectK = 0.35 + 0.4 * fres; spec = 0.9; specPow = 60.0;
-        float lit = step(h, 0.58 * uNight + 0.02);
+        float lit = step(h, 0.6 * uNight) * smoothstep(0.0, 0.25, uNight);
         vec3 tint = h * 13.7 - floor(h * 13.7) > 0.72 ? vec3(0.6, 0.78, 1.0) : vec3(1.0, 0.7, 0.38);
         float flick = 0.75 + 0.25 * hash12(id + 3.1);
         emissive += lit * tint * 2.6 * flick;
@@ -127,7 +127,7 @@ void main() {
     spec = 1.0; specPow = 60.0; reflectK = 0.2;
     emissive += vec3(0.05, 0.25, 0.35) * uNight;
   } else if (mat == 12) {
-    emissive = vColor * vEmissive * (0.25 + 1.3 * uNight);
+    emissive = vColor * vEmissive * (0.06 + 1.3 * uNight);
   }
 
   // ----- lighting -----

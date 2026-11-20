@@ -85,9 +85,9 @@ export class Renderer {
 
   initWater() {
     // a radial-ish grid that is denser near the camera; moved with the camera each frame
-    const v = [], N = 72, S = 1600;
+    const v = [], N = 80, S = 5000;
     for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
-      const f = (k) => { const t = k / N * 2 - 1; return Math.sign(t) * t * t * S / 2; };
+      const f = (k) => { const t = k / N * 2 - 1; return Math.sign(t) * Math.abs(t) ** 2.4 * S / 2; };
       const x0 = f(i), x1 = f(i + 1), z0 = f(j), z1 = f(j + 1);
       for (const [x, z] of [[x0, z1], [x1, z1], [x1, z0], [x0, z1], [x1, z0], [x0, z0]]) v.push(x, 0, z, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0);
     }
