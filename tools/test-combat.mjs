@@ -1,0 +1,28 @@
+// Stage-7/8 check: shooting, wanted level, cop cars, roadblock, helicopter, explosion.
+import { createRequire } from 'node:module';
+import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
+const { chromium } = createRequire(import.meta.url)('playwright');
+const root = path.resolve('game');
+const server = http.createServer((req, res) => { const p = path.join(root, req.url.split('?')[0].replace(/\/$/, '/index.html')); fs.readFile(p, (e, d) => { if (e) { res.writeHead(404); res.end(); return; } res.writeHead(200, { 'content-type': p.endsWith('.js') ? 'text/javascript' : p.endsWith('.css') ? 'text/css' : 'text/html' }); res.end(d); }); }).listen(0);
+const browser = await chromium.launch(); const page = await browser.newPage({ viewport: { width: 960, height: 540 } });
+const errs = []; page.on('pageerror', (e) => errs.push(e.message + ' ' + (e.stack || '').split('\n').slice(1, 3).join(' '))); page.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
+await page.goto(`http://localhost:${server.address().port}/index.html?q=medium&nolock`);
+await page.waitForFunction(() => window.__G && __G.mode === 'playing', null, { timeout: 90000 });
+const st = () => page.evaluate(() => ({ stars: __G.wanted.stars, heli: !!__G.heli, chase: __G.vehicles.filter((v) => v.ai && v.ai.mode === 'chase').length, block: __G.vehicles.filter((v) => v.ai && v.ai.mode === 'block').length, cops: __G.peds.filter((p) => p.kind === 'cop' && !p.vehicle).length, shots: __G.stats.shots, hp: Math.round(__G.player.hp), mode: __G.mode }));
+await page.evaluate(() => { __G.godMode = true; __G.clock = 22 * 60; __G.player.giveWeapon('wasp', 300); __G.player.weapon = 'wasp'; });
+await page.mouse.move(480, 270);
+await page.mouse.down(); await page.waitForTimeout(2500); await page.mouse.up();
+console.log('after shooting', await st());
+await page.evaluate(() => { __G.simSpeed = 2; const v = __G.vehicles.find((v) => !v.driver && v.role === 'parked'); __G.player.enterVehicle(v); });
+await page.evaluate(() => { const m = (s) => import('./js/ai/police.js').then((P) => P.setWanted(s)); return m(4); });
+await page.keyboard.down('KeyW'); await page.waitForTimeout(6000); await page.keyboard.up('KeyW');
+console.log('4 stars', await st());
+await page.screenshot({ path: 'tools/out/police1.png' });
+await page.evaluate(() => { const v = __G.vehicles.find((v) => v.ai && v.ai.mode === 'chase') || __G.vehicles.find((v) => v !== __G.player.vehicle); v.damage(5000); });
+await page.waitForTimeout(1200);
+await page.screenshot({ path: 'tools/out/explosion.png' });
+await page.evaluate(() => { if (__G.heli) __G.damageHeli(1000); });
+await page.waitForTimeout(3000);
+console.log('heli down', await st());
+console.log(errs.length ? errs.slice(0, 10).join('\n') : 'no errors');
+await browser.close(); server.close();

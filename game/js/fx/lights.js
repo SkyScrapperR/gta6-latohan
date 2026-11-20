@@ -28,12 +28,12 @@ export function collectLights(R, dt) {
     if (v.wrecked || !near(v.x, v.z, 200)) continue;
     const fx = Math.cos(v.angle), fz = Math.sin(v.angle);
     if (v.driver && night > 0.05) {
-      out.push({ x: v.x + fx * (v.len / 2 + 0.3), y: 0.9, z: v.z + fz * (v.len / 2 + 0.3), r: 34, color: [1, 0.95, 0.82], intensity: 3.2 * night, dir: [fx, -0.12, fz], cos: 0.78, priority: v.driver.isPlayer ? 4000 : 0 });
+      out.push({ x: v.x + fx * (v.len / 2 + 0.3), y: 0.9, z: v.z + fz * (v.len / 2 + 0.3), r: 32, color: [1, 0.95, 0.82], intensity: 2.4 * night, dir: [fx, -0.12, fz], cos: 0.78, priority: v.driver.isPlayer ? 4000 : 0 });
       out.push({ x: v.x - fx * (v.len / 2 + 0.4), y: 0.8, z: v.z - fz * (v.len / 2 + 0.4), r: 5, color: [1, 0.08, 0.05], intensity: v.braking ? 3 : 1.2 });
     }
     if (v.siren) {
       const ph = Math.floor(G.time * 7) % 2;
-      out.push({ x: v.x, y: 2.2, z: v.z, r: 20, color: ph ? [0.15, 0.3, 1] : [1, 0.06, 0.1], intensity: 4.5, priority: 2500 });
+      out.push({ x: v.x, y: 2.2, z: v.z, r: 20, color: ph ? [0.15, 0.3, 1] : [1, 0.06, 0.1], intensity: 2.2, priority: 2500 });
     }
     if (v.onFire) out.push({ x: v.x, y: 1.5, z: v.z, r: 14, color: [1, 0.5, 0.2], intensity: 3 });
   }

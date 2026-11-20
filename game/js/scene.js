@@ -9,6 +9,7 @@ import { packParticles } from './fx/particles.js';
 import { collectLights } from './fx/lights.js';
 import { signalState } from './world/roads.js';
 import { rebuildLamps } from './world/city-meshes.js';
+import { drawHeli } from './ai/police.js';
 
 const tmp = mat4.create();
 let beamMeshes = null;
@@ -30,6 +31,7 @@ export function assembleScene(R, dt) {
   R.dynamic.length = 0;
   const wb = G.props.wheels; wb.clear();
   for (const v of G.vehicles) if (near(v.x, v.z, 260)) v.pushDraw(R, wb);
+  drawHeli(R);
   // traffic signals near the camera
   const sb = G.props.signals; sb.clear();
   for (const s of G.city.signals) {

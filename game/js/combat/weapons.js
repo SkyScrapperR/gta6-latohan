@@ -61,11 +61,11 @@ export function fireWeapon(shooter, wid, ox, oy, oz, angle, inaccuracy = 0, pitc
     const h = G.heli;
     if (h && isPlayer && !h.down) { const t = rayCircle(ox, oz, dx, dz, best + 30, h.x, h.z, 4); if (t >= 0 && t < best + 30) { best = t; target = h; } }
     const hx = ox + dx * best, hz = oz + dz * best;
-    let hy = target ? (target === h ? h.y : target.kind === 'vehicle' ? 1.0 : 1.2) : clamp(oy - Math.tan(pitch) * best * 0.3, 0.1, 30);
-    if (target === h) hy = h.y;
+    const isHeli = !!h && target === h;
+    const hy = isHeli ? h.y : target ? (target.kind === 'vehicle' ? 1.0 : 1.2) : clamp(oy - Math.tan(pitch) * best * 0.3, 0.1, 30);
     tracer(ox + dx * 0.4, oy, oz + dz * 0.4, hx, hy, hz, isPlayer ? [4, 3.3, 1.6] : [4, 1.6, 1]);
     if (target) {
-      if (target === h) { G.damageHeli && G.damageHeli(w.damage); sparks(hx, hy, hz, 4, 5); }
+      if (isHeli) { G.damageHeli && G.damageHeli(w.damage); sparks(hx, hy, hz, 4, 5); }
       else if (target.kind === 'vehicle') {
         target.damage(w.damage * (isPlayer ? 2.2 : 1.1), shooter);
         sparks(hx, hy, hz, 5, 6);
