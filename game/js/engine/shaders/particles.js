@@ -11,7 +11,10 @@ void main() {
   vec3 p = iPosSize.xyz;
   vec3 s = iStretch.xyz;
   vec3 offs;
-  if (dot(s, s) > 0.0001) {
+  if (iStretch.w > 2.5) {
+    offs = vec3(aCorner.x, 0.0, aCorner.y) * iPosSize.w;   // flat ground decal
+    if (dot(s, s) > 0.0001) { vec3 side = normalize(vec3(-s.z, 0.0, s.x)) * iPosSize.w; offs = side * aCorner.x + s * (aCorner.y * 0.5); }
+  } else if (dot(s, s) > 0.0001) {
     vec3 view = normalize(uCamPos - p);
     vec3 side = normalize(cross(s, view)) * iPosSize.w;
     offs = side * aCorner.x + s * (aCorner.y * 0.5);
@@ -29,6 +32,7 @@ void main() {
   float a;
   if (vKind > 0.5 && vKind < 1.5) a = 1.0 - smoothstep(0.0, 1.0, abs(vC.x)); // tracer / streak
   else a = smoothstep(1.0, 0.15, d);
-  if (vKind > 1.5) a *= a; // soft glow
+  if (vKind > 1.5 && vKind < 2.5) a *= a; // soft glow
+  if (vKind > 3.5) a = smoothstep(1.0, 0.3, d) * (0.6 + 0.4 * fract(sin(dot(floor(vC * 4.0), vec2(12.9, 78.2))) * 43758.5)); // scorch
   frag = vec4(vCol.rgb, vCol.a * a);
 }`;

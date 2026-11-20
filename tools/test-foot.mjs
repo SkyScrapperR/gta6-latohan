@@ -1,0 +1,23 @@
+// Stage-4 check: walk, sprint, jump, aim, orbit camera.
+import { createRequire } from 'node:module';
+import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
+const { chromium } = createRequire(import.meta.url)('playwright');
+const root = path.resolve('game');
+const server = http.createServer((req, res) => { const p = path.join(root, req.url.split('?')[0].replace(/\/$/, '/index.html')); fs.readFile(p, (e, d) => { if (e) { res.writeHead(404); res.end(); return; } res.writeHead(200, { 'content-type': p.endsWith('.js') ? 'text/javascript' : p.endsWith('.css') ? 'text/css' : 'text/html' }); res.end(d); }); }).listen(0);
+const browser = await chromium.launch(); const page = await browser.newPage({ viewport: { width: 960, height: 540 } });
+const errs = []; page.on('pageerror', (e) => errs.push(e.message)); page.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
+await page.goto(`http://localhost:${server.address().port}/index.html?q=medium`);
+await page.waitForFunction(() => window.__G && __G.mode === 'playing', null, { timeout: 60000 });
+await page.waitForTimeout(1500);
+const st = () => page.evaluate(() => ({ x: +__G.player.x.toFixed(1), z: +__G.player.z.toFixed(1), y: +__G.player.y.toFixed(2), f: window.__frames }));
+console.log('start', await st());
+await page.evaluate(() => { __G.simSpeed = 1; });
+await page.keyboard.down('KeyW'); await page.waitForTimeout(2500); await page.keyboard.up('KeyW');
+console.log('after W', await st());
+await page.screenshot({ path: 'tools/out/foot1.png' });
+await page.mouse.move(480, 270); await page.mouse.move(700, 270);
+await page.mouse.down({ button: 'right' }); await page.waitForTimeout(800);
+await page.screenshot({ path: 'tools/out/foot-aim.png' });
+await page.mouse.up({ button: 'right' });
+console.log(errs.length ? errs.join('\n') : 'no errors');
+await browser.close(); server.close();
