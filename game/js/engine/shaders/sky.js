@@ -10,12 +10,12 @@ void main() {
 export const SKY_FS = GLSL_COMMON + `
 in vec2 vUV;
 uniform mat4 uInvViewProj;
-uniform vec3 uZenith, uHorizon, uSunDir, uSunCol, uMoonDir;
+uniform vec3 uZenith, uHorizon, uSunDir, uSunCol, uMoonDir, uCamPos;
 uniform float uNight, uTime, uCloud, uRain;
 out vec4 frag;
 void main() {
   vec4 p = uInvViewProj * vec4(vUV * 2.0 - 1.0, 1.0, 1.0);
-  vec3 dir = normalize(p.xyz / p.w);
+  vec3 dir = normalize(p.xyz / p.w - uCamPos);
   float h = clamp(dir.y, -0.2, 1.0);
   vec3 col = mix(uHorizon, uZenith, pow(max(h, 0.0), 0.55));
   if (dir.y < 0.0) col = mix(uHorizon, uHorizon * 0.55, clamp(-dir.y * 4.0, 0.0, 1.0));
@@ -24,7 +24,7 @@ void main() {
   col += uSunCol * (pow(sd, 8.0) * 0.28 + smoothstep(0.9985, 0.9992, sd) * 1.6) * (1.0 - uRain * 0.8);
   // moon
   float md = max(dot(dir, uMoonDir), 0.0);
-  col += vec3(0.75, 0.82, 1.0) * (smoothstep(0.9993, 0.9996, md) * 2.2 + pow(md, 60.0) * 0.12) * uNight;
+  col += vec3(0.75, 0.82, 1.0) * (smoothstep(0.99955, 0.9997, md) * 1.6 + pow(md, 80.0) * 0.1) * uNight;
   // stars
   if (uNight > 0.01 && dir.y > 0.0) {
     vec2 sp = dir.xz / (dir.y + 0.35) * 220.0;

@@ -179,7 +179,7 @@ export class Renderer {
     // sky
     gl.depthMask(false);
     const sk = this.sky.use(), e = this.env;
-    sk.m4('uInvViewProj', this.camera.inv).f3('uZenith', e.zenith).f3('uHorizon', e.horizon).f3('uSunDir', e.sunDirTrue || e.sunDir)
+    sk.m4('uInvViewProj', this.camera.inv).f3('uCamPos', this.camera.pos).f3('uZenith', e.zenith).f3('uHorizon', e.horizon).f3('uSunDir', e.sunDirTrue || e.sunDir)
       .f3('uSunCol', e.sunCol).f3('uMoonDir', e.moonDir).f1('uNight', e.night).f1('uTime', time).f1('uCloud', e.cloud).f1('uRain', e.rain);
     gl.bindVertexArray(this.emptyVAO); gl.drawArrays(gl.TRIANGLES, 0, 3);
     gl.depthMask(true);

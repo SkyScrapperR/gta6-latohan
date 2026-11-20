@@ -18,7 +18,7 @@ export const MODELS = {
   vesper: { name: 'Vesper GT', len: 4.45, wid: 1.96, max: 64, accel: 17, grip: 8.8, steer: 2.15, mass: 1, hp: 950, colors: [[0.98, 0.78, 0.08], [0.86, 0.12, 0.2], [0.12, 0.12, 0.14], [0.94, 0.43, 0.08]] },
   bajak: { name: 'Bajak', len: 4.9, wid: 1.98, max: 36, accel: 8, grip: 6.8, steer: 1.8, mass: 1.4, hp: 1100, colors: [[0.92, 0.92, 0.9], [0.35, 0.47, 0.63], [0.78, 0.63, 0.24], [0.27, 0.35, 0.27]] },
   bison: { name: 'Bison', len: 7.6, wid: 2.45, max: 30, accel: 6, grip: 6.4, steer: 1.45, mass: 2.6, hp: 1700, colors: [[0.86, 0.35, 0.16], [0.24, 0.39, 0.67], [0.94, 0.94, 0.94]] },
-  patrol: { name: 'Garuda Patrol', len: 4.7, wid: 1.9, max: 56, accel: 14, grip: 8.3, steer: 2.05, mass: 1.15, hp: 1200, colors: [[0.95, 0.95, 0.95]] },
+  patrol: { name: 'Garuda Patrol', len: 4.7, wid: 1.9, max: 56, accel: 14, grip: 8.3, steer: 2.05, mass: 1.15, hp: 1200, colors: [[0.82, 0.83, 0.86]] },
 };
 export const TRAFFIC_MODELS = ['kancil', 'kancil', 'merpati', 'merpati', 'merpati', 'taxi', 'taxi', 'bajak', 'bison', 'vesper'];
 

@@ -33,14 +33,14 @@ export function collectLights(R, dt) {
     }
     if (v.siren) {
       const ph = Math.floor(G.time * 7) % 2;
-      out.push({ x: v.x, y: 2.2, z: v.z, r: 20, color: ph ? [0.15, 0.3, 1] : [1, 0.06, 0.1], intensity: 2.2, priority: 2500 });
+      out.push({ x: v.x, y: 2.2, z: v.z, r: 20, color: ph ? [0.15, 0.3, 1] : [1, 0.06, 0.1], intensity: 1.6, priority: 2500 });
     }
     if (v.onFire) out.push({ x: v.x, y: 1.5, z: v.z, r: 14, color: [1, 0.5, 0.2], intensity: 3 });
   }
   const h = G.heli;
   if (h && h.spotOn && night > 0.02) {
     const L = Math.hypot(h.spotX - h.x, h.y - 1, h.spotZ - h.z);
-    out.push({ x: h.x, y: h.y - 1.2, z: h.z, r: L + 12, color: [1, 1, 0.92], intensity: 3.2, dir: norm([h.spotX - h.x, -(h.y - 1), h.spotZ - h.z]), cos: 0.975, priority: 5000 });
+    out.push({ x: h.x, y: h.y - 1.2, z: h.z, r: L + 12, color: [1, 1, 0.92], intensity: 2.4, dir: norm([h.spotX - h.x, -(h.y - 1), h.spotZ - h.z]), cos: 0.975, priority: 5000 });
   }
   for (let i = transient.length - 1; i >= 0; i--) {
     const t = transient[i];

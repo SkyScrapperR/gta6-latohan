@@ -51,6 +51,16 @@ export function updateCamera(dt) {
     height = 1.5;
     fov = clamp(62 + sp * 0.45, 62, 88);
     focus = [v.x, v.y + height, v.z];
+    if (rig.cinematic) {
+      // C: low trailing "cinematic" angle from the rear quarter
+      const a = v.angle + Math.PI + 0.55, d = 6.5 + sp * 0.03;
+      const cpos = collide(v.x, v.y + 1, v.z, v.x + Math.cos(a) * d, v.y + 0.7, v.z + Math.sin(a) * d);
+      rig.pos = rig.pos.map((c, i) => lerp(c, cpos[i], 1 - Math.exp(-dt * 6)));
+      rig.target = [v.x + Math.cos(v.angle) * 6, v.y + 1, v.z + Math.sin(v.angle) * 6];
+      rig.fov = lerp(rig.fov, 50 + sp * 0.3, Math.min(1, dt * 3));
+      applyShake(dt);
+      return;
+    }
   } else {
     const aim = p.aiming ? 1 : 0;
     rig.aimK = lerp(rig.aimK || 0, aim, Math.min(1, dt * 10));

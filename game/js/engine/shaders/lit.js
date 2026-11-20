@@ -59,7 +59,7 @@ float shadowAt(vec3 wp, vec3 n) {
 }
 
 void main() {
-  vec3 n = normalize(vNormal);
+  vec3 n = dot(vNormal, vNormal) > 1e-8 ? normalize(vNormal) : vec3(0.0, 1.0, 0.0);
   if (!gl_FrontFacing) n = -n;
   vec3 V = normalize(uCamPos - vWorld);
   vec3 albedo = vColor;
@@ -144,7 +144,7 @@ void main() {
     float d = length(Lv);
     float r = uLightPos[i].w;
     if (d > r) continue;
-    vec3 L = Lv / d;
+    vec3 L = Lv / max(d, 1e-3);
     float att = 1.0 - d / r; att *= att;
     vec4 dir = uLightDir[i];
     if (dir.w > 0.0) {

@@ -35,7 +35,7 @@ export function casing(x, y, z, angle) {
 }
 export function muzzleFlash(x, y, z, angle) {
   spawn({ t: 'flash', x, y, z, life: 0.05, max: 0.05, size: 0.3, color: [3, 2.2, 1] });
-  addTransientLight(x, y, z, 9, [1, 0.75, 0.4], 3.5, 0.06);
+  addTransientLight(x, y, z, 6, [1, 0.75, 0.4], 1.6, 0.05);
 }
 export function cashBurst(x, y, z) { sparks(x, y, z, 10, 3, [0.4, 2.5, 0.6]); }
 export function splash(x, z, y = 0.05) { spawn({ t: 'splash', x, y, z, vx: 0, vy: 1.6, vz: 0, life: 0.25, max: 0.25, size: 0.05, color: [0.6, 0.7, 0.8], grav: 10 }); }

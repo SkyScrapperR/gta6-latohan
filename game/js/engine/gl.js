@@ -9,7 +9,7 @@ export const STATIC_STRIDE = 13;
 export const ATTR = { aPos: 0, aNormal: 1, aColor: 2, aEmissive: 3, aMat: 4, aUV: 5, iModel: 6, iColor: 10, iParams: 11 };
 
 export function createGL(canvas) {
-  const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, depth: true, stencil: false, powerPreference: 'high-performance', preserveDrawingBuffer: false });
+  const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, depth: true, stencil: false, powerPreference: 'high-performance', preserveDrawingBuffer: true });
   if (!gl) throw new Error('WebGL2 is not available in this browser.');
   gl.getExtension('EXT_color_buffer_float');
   gl.getExtension('OES_texture_float_linear');

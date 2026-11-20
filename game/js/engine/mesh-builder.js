@@ -18,7 +18,14 @@ export class MeshBuilder {
   }
   /** Quad from 4 corners (counter-clockwise when seen from the normal side). */
   quad(p0, p1, p2, p3, nrm, c, e = 0, mat = 0, uv = null) {
-    const [nx, ny, nz] = nrm;
+    let [nx, ny, nz] = nrm;
+    if (nx * nx + ny * ny + nz * nz < 1e-8) {
+      // derive the face normal from the corners when none is given
+      const ax = p1[0] - p0[0], ay = p1[1] - p0[1], az = p1[2] - p0[2], bx = p2[0] - p0[0], by = p2[1] - p0[1], bz = p2[2] - p0[2];
+      nx = ay * bz - az * by; ny = az * bx - ax * bz; nz = ax * by - ay * bx;
+      const l = Math.hypot(nx, ny, nz) || 1; nx /= l; ny /= l; nz /= l;
+      if (!(nx || ny || nz)) ny = 1;
+    }
     const u = uv || [0, 0, 1, 0, 1, 1, 0, 1];
     this.vert(...p0, nx, ny, nz, c, e, mat, u[0], u[1]); this.vert(...p1, nx, ny, nz, c, e, mat, u[2], u[3]); this.vert(...p2, nx, ny, nz, c, e, mat, u[4], u[5]);
     this.vert(...p0, nx, ny, nz, c, e, mat, u[0], u[1]); this.vert(...p2, nx, ny, nz, c, e, mat, u[4], u[5]); this.vert(...p3, nx, ny, nz, c, e, mat, u[6], u[7]);

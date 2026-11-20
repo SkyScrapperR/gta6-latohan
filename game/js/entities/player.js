@@ -140,6 +140,7 @@ export class Player {
     fireWeapon(this, this.weapon, this.x + ca * 0.7 - sa * 0.27, 1.45 + this.y, this.z + sa * 0.7 + ca * 0.27, angle, inacc, rig.pitch);
     this.clip[this.weapon]--;
     this.recoil = 1;
+    rig.pitch -= w.bloom * 0.03; rig.yaw += (Math.random() - 0.5) * w.bloom * 0.02; // recoil kick
     G.ui.crossBloom = Math.min(1, G.ui.crossBloom + w.bloom);
     if (this.clip[this.weapon] <= 0 && this.ammo[this.weapon] > 0) this.reload();
   }

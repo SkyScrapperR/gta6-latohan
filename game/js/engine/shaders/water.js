@@ -42,12 +42,12 @@ void main() {
   vec3 base = mix(deep, shallow, shore);
   vec3 col = mix(base, sky, fres);
   float sun = pow(max(dot(R, uSunDir), 0.0), 220.0);
-  col += uSunCol * sun * 4.0;
+  col += uSunCol * sun * 2.5;
   for (int i = 0; i < 32; i++) {
     if (i >= uLightCount) break;
     vec3 L = uLightPos[i].xyz - vWorld; float d = length(L);
     if (d > uLightPos[i].w * 3.0) continue;
-    col += uLightCol[i].rgb * uLightCol[i].w * pow(max(dot(R, L / d), 0.0), 40.0) * (1.0 - d / (uLightPos[i].w * 3.0)) * 1.5;
+    col += uLightCol[i].rgb * uLightCol[i].w * pow(max(dot(R, L / d), 0.0), 90.0) * (1.0 - d / (uLightPos[i].w * 3.0)) * 0.35;
   }
   float foam = (1.0 - smoothstep(0.0, 3.5 + 1.5 * sin(uTime * 1.3 + q.x * 0.2), edge)) * (0.6 + 0.4 * vnoise(q * 0.9 + uTime));
   col = mix(col, vec3(0.9, 0.95, 1.0) * (0.25 + 0.75 * (1.0 - uNight * 0.85)), clamp(foam, 0.0, 1.0));
