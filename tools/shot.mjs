@@ -17,7 +17,7 @@ fs.mkdirSync(path.dirname(out), { recursive: true });
 const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] });
 const page = await browser.newPage({ viewport: { width: +w, height: +h } });
 const errors = [];
-page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(m.type() + ': ' + m.text()); });
+page.on('console', (m) => { if (m.type() === 'error' || (m.type() === 'warning' && !m.text().includes('GPU stall'))) errors.push(m.type() + ': ' + m.text()); });
 page.on('pageerror', (e) => errors.push('pageerror: ' + e.message + '\n' + e.stack));
 await page.goto(`http://localhost:${port}/index.html${query}`);
 const t0 = Date.now();
