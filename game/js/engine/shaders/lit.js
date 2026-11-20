@@ -118,7 +118,7 @@ void main() {
   } else if (mat == 8) {
     emissive = vec3(1.0, 0.95, 0.8) * (0.25 + 3.5 * vParams.x);
   } else if (mat == 9) {
-    emissive = vec3(1.0, 0.05, 0.08) * (vParams.z > 0.5 ? 6.0 : 0.15);
+    emissive = vec3(1.0, 0.05, 0.08) * (vParams.z > 0.5 && vParams.z < 1.5 ? 6.0 : 0.15);
   } else if (mat == 10) {
     emissive = vec3(0.1, 0.25, 1.0) * (vParams.z > 0.5 && vParams.z < 1.5 ? 0.15 : (vParams.z > 1.5 ? 6.0 : 0.15));
   } else if (mat == 11) {
