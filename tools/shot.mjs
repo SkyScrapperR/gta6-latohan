@@ -21,7 +21,7 @@ page.on('console', (m) => { if (m.type() === 'error' || (m.type() === 'warning' 
 page.on('pageerror', (e) => errors.push('pageerror: ' + e.message + '\n' + e.stack));
 await page.goto(`http://localhost:${port}/index.html${query}`);
 const t0 = Date.now();
-if (query.includes('shot=')) await page.waitForFunction(() => window.__shotReady === true, null, { timeout: 60000, polling: 16 }).catch(() => errors.push('timeout waiting for __shotReady'));
+if (query.includes('shot=')) await page.waitForFunction(() => window.__shotReady === true, null, { timeout: 300000, polling: 100 }).catch(() => errors.push('timeout waiting for __shotReady'));
 else await page.waitForTimeout(+wait);
 const frames = await page.evaluate(() => window.__frames || 0);
 await page.screenshot({ path: out });

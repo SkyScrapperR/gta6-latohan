@@ -21,7 +21,7 @@ void main() {
   if (dir.y < 0.0) col = mix(uHorizon, uHorizon * 0.55, clamp(-dir.y * 4.0, 0.0, 1.0));
   // sun glow + disc
   float sd = max(dot(dir, uSunDir), 0.0);
-  col += uSunCol * (pow(sd, 8.0) * 0.35 + pow(sd, 300.0) * 6.0) * (1.0 - uRain * 0.8);
+  col += uSunCol * (pow(sd, 8.0) * 0.28 + smoothstep(0.9985, 0.9992, sd) * 1.6) * (1.0 - uRain * 0.8);
   // moon
   float md = max(dot(dir, uMoonDir), 0.0);
   col += vec3(0.75, 0.82, 1.0) * (smoothstep(0.9993, 0.9996, md) * 2.2 + pow(md, 60.0) * 0.12) * uNight;

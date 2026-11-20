@@ -42,10 +42,10 @@ export function splash(x, z, y = 0.05) { spawn({ t: 'splash', x, y, z, vx: 0, vy
 
 /** Visual part of an explosion (damage lives in combat/weapons.js). */
 export function explosionFx(x, y, z, power = 1) {
-  spawn({ t: 'flash', x, y: y + 1.5, z, life: 0.35, max: 0.35, size: 5 * power, color: [3.2, 2.0, 0.9] });
+  spawn({ t: 'flash', x, y: y + 1.5, z, life: 0.3, max: 0.3, size: 4 * power, color: [2.4, 1.2, 0.35] });
   for (let i = 0; i < 34 * power; i++) {
     const a = Math.random() * Math.PI * 2, e = Math.random() * 1.3, s = Math.random() * 9 * power;
-    spawn({ t: 'fire', x, y: y + 0.6, z, vx: Math.cos(a) * Math.cos(e) * s, vy: Math.sin(e) * s + 2, vz: Math.sin(a) * Math.cos(e) * s, life: 0.7 + Math.random() * 0.6, max: 1.3, size: 1.2 + Math.random() * 1.4, grow: 1.2, drag: 2.5 });
+    spawn({ t: 'fire', x, y: y + 0.6, z, vx: Math.cos(a) * Math.cos(e) * s, vy: Math.sin(e) * s + 2.5, vz: Math.sin(a) * Math.cos(e) * s, life: 0.9 + Math.random() * 0.9, max: 1.8, size: 1.6 + Math.random() * 1.8, grow: 1.0, drag: 2.2 });
   }
   for (let i = 0; i < 24 * power; i++) smoke(x + (Math.random() - 0.5) * 3, y + 1 + Math.random() * 2, z + (Math.random() - 0.5) * 3, { size: 1.6, life: 3.5 + Math.random() * 2, shade: 0.12, vx: (Math.random() - 0.5) * 4, vy: 2 + Math.random() * 3, vz: (Math.random() - 0.5) * 4, grow: 1.6 });
   sparks(x, y + 1, z, 40, 16);
@@ -116,7 +116,7 @@ export function packParticles(R) {
   for (const p of parts) {
     if (!near(p.x, p.z)) continue;
     const k = p.life / p.max;
-    if (p.t === 'fire') put(p.x, p.y, p.z, p.size, 1.8 * k + 0.5, 0.75 * k + 0.12, 0.12 * k, 0.55 * k, 0, 0, 0, KIND.GLOW);
+    if (p.t === 'fire') put(p.x, p.y, p.z, p.size, 1.9 * k + 0.45, 0.62 * k + 0.08, 0.06 * k, 0.6 * Math.min(1, k * 1.5), 0, 0, 0, KIND.GLOW);
     else if (p.t === 'spark') put(p.x, p.y, p.z, p.size, p.color[0], p.color[1], p.color[2], k, p.vx * 0.04, p.vy * 0.04, p.vz * 0.04, KIND.STREAK);
     else if (p.t === 'flash') put(p.x, p.y, p.z, p.size * (1.3 - k * 0.3), p.color[0], p.color[1], p.color[2], k, 0, 0, 0, KIND.GLOW);
   }

@@ -38,6 +38,7 @@ const params = new URLSearchParams(location.search);
 G.debug.shot = +(params.get('shot') || 0);
 G.noPointerLock = params.has('nolock') || !!G.debug.shot;
 window.__G = G; // handy for debugging from the console
+window.__input = input;
 
 function resize() {
   G.W = innerWidth; G.H = innerHeight;
@@ -128,6 +129,7 @@ function tick(dt) {
   if (!G.clockFrozen) G.clock = (G.clock + dt) % 1440;
   G.stats.played += dt;
   updateWeather(dt);
+  if (G.testHook) G.testHook(dt);
   if (pl) pl.update(dt);
   for (const v of G.vehicles) {
     if (v.driver && !v.driver.isPlayer && v.ai) {

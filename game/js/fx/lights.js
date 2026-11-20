@@ -38,7 +38,10 @@ export function collectLights(R, dt) {
     if (v.onFire) out.push({ x: v.x, y: 1.5, z: v.z, r: 14, color: [1, 0.5, 0.2], intensity: 3 });
   }
   const h = G.heli;
-  if (h && night > 0.02) out.push({ x: h.spotX, y: h.y - 4, z: h.spotZ, r: h.y + 14, color: [1, 1, 0.92], intensity: 6, dir: norm([h.spotX - h.x, -(h.y - 1), h.spotZ - h.z]), cos: 0.985, priority: 5000 });
+  if (h && h.spotOn && night > 0.02) {
+    const L = Math.hypot(h.spotX - h.x, h.y - 1, h.spotZ - h.z);
+    out.push({ x: h.x, y: h.y - 1.2, z: h.z, r: L + 12, color: [1, 1, 0.92], intensity: 3.2, dir: norm([h.spotX - h.x, -(h.y - 1), h.spotZ - h.z]), cos: 0.975, priority: 5000 });
+  }
   for (let i = transient.length - 1; i >= 0; i--) {
     const t = transient[i];
     t.life -= dt;

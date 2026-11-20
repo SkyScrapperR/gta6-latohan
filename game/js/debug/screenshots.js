@@ -62,22 +62,23 @@ export function setupShot(n) {
   } else if (n === 4) {
     G.clock = 22 * 60 + 15; G.clockFrozen = true;
     G.progress.missionIndex = 4;
-    const f = G.city.landmarks.freight;
-    P.x = f.x - 22; P.z = f.z + 22; P.giveWeapon('wasp', 180); P.weapon = 'wasp'; P.armor = 100;
-    const truck = Missions.spawnCar('bison', f.x + 4, f.z + 4, -0.3, [0.46, 0.16, 0.66]);
+    G.noCrime = true;
+    // on the quay, looking north: container stacks on the left, gantry cranes ahead
+    P.x = 1072; P.z = 968; P.giveWeapon('wasp', 180); P.weapon = 'wasp'; P.armor = 100;
+    const truck = Missions.spawnCar('bison', 1066, 918, -1.4, [0.46, 0.16, 0.66]);
     const rng = new RNG(5), guards = [];
-    for (const [dx, dz] of [[-10, -6], [12, -4], [6, 10], [16, 8], [0, -10]]) { const q = Missions.spawnGang(f.x + dx, f.z + dz, rng.chance(0.5) ? 'wasp' : 'kobra', 9999); q.state = 'combat'; guards.push(q); }
+    for (const [x, z] of [[1046, 942], [1058, 930], [1078, 926], [1050, 905], [1084, 940]]) { const q = Missions.spawnGang(x, z, rng.chance(0.5) ? 'wasp' : 'kobra', 9999); q.state = 'combat'; guards.push(q); }
     G.ui.objective = 'Guards left: 5  ·  Blow up the Bison weapons truck';
-    G.noPointerLock = true;
     let t = 0, shot = 0;
     G.shotUpdate = (dt) => {
       t += dt; shot -= dt;
       const tgt = guards[Math.floor(t / 0.9) % guards.length];
       const a = Math.atan2(tgt.z - P.z, tgt.x - P.x);
-      rig.yaw = a - 0.08; rig.pitch = 0.1; P.angle = a; P.aiming = true; P.forceAim = true;
+      rig.yaw = -Math.PI / 2 - 0.12; rig.pitch = 0.02; P.angle = rig.yaw; P.forceAim = true;
+      P.x = 1072; P.z = 968;
       if (shot <= 0) { shot = 0.08; fireWeapon(P, 'wasp', P.x + Math.cos(a) * 0.7, 1.6, P.z + Math.sin(a) * 0.7, a, 0.02, 0.05); }
-      if (t > 2.4 && !truck.wrecked) truck.explode();
-      if (t > 2.7 && !window.__shotReady) window.__shotReady = true;
+      if (t > 2.2 && !truck.wrecked) truck.explode();
+      if (t > 2.6 && !window.__shotReady) window.__shotReady = true;
     };
   }
 }

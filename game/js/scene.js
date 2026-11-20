@@ -61,14 +61,14 @@ export function assembleScene(R, dt) {
       const m = mat4.create();
       mat4.translate(m, m, h.x, h.y - 1.2, h.z);
       const yaw = Math.atan2(dx, dz), pitch = Math.acos(-dy / L);
-      mat4.rotateY(m, m, yaw); mat4.rotateX(m, m, pitch); mat4.rotateX(m, m, Math.PI);
-      mat4.scale(m, m, 7, L, 7);
-      R.beams.push({ mesh: beamMeshes.cone, model: m, color: [1, 1, 0.9], alpha: 0.22 + 0.25 * R.env.night, fadeTop: false });
+      mat4.rotateY(m, m, yaw); mat4.rotateX(m, m, -pitch); mat4.rotateX(m, m, Math.PI);
+      mat4.scale(m, m, 4.5, L, 4.5);
+      R.beams.push({ mesh: beamMeshes.cone, model: m, color: [1, 1, 0.9], alpha: 0.12 + 0.2 * R.env.night, fadeTop: false });
     }
     G.markers = G.collectMarkers ? G.collectMarkers() : [];
     for (const mk of G.markers) {
       const m = mat4.create(); mat4.trs(m, mk.x, mk.y || 0.15, mk.z, 0, mk.r, mk.h || 4, mk.r);
-      R.beams.push({ mesh: beamMeshes.cylinder, model: m, color: mk.color, alpha: 0.9, fadeTop: true });
+      R.beams.push({ mesh: beamMeshes.cylinder, model: m, color: mk.color, alpha: mk.r > 2.5 ? 0.45 : 0.85, fadeTop: true });
       G.markerLights.push({ x: mk.x, y: 1.5, z: mk.z, r: mk.r * 5, color: mk.color, intensity: 1.8 });
     }
   }

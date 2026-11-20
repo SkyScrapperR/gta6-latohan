@@ -4,7 +4,7 @@
 import { G } from './core/state.js';
 import { input } from './core/input.js';
 import { clamp, lerp, angleDiff } from './core/math.js';
-import { raycastWorld } from './world/collision.js';
+import { raycastWorld, pointInBuilding, lineBlocked } from './world/collision.js';
 import { groundHeight } from './world/city.js';
 
 export const rig = {
@@ -77,7 +77,22 @@ function applyShake(dt) {
 }
 
 /** Scripted shot: { from, to, lookFrom, lookTo, dur, t, fov } — dolly between two positions. */
-export function playShot(shot) { rig.cine = { t: 0, fov: 50, ...shot }; }
+export function playShot(shot) {
+  if (shot.orbit) shot = { ...shot, orbit: freeOrbit(shot.orbit) };
+  rig.cine = { t: 0, fov: 50, ...shot };
+}
+/** Rotate an orbit shot until both ends have a clear view of the subject (never start inside a wall). */
+function freeOrbit(o) {
+  const ok = (a) => {
+    const x = o.cx + Math.cos(a) * o.r, z = o.cz + Math.sin(a) * o.r;
+    return !pointInBuilding(x, z) && !lineBlocked(x, z, o.cx, o.cz, 1);
+  };
+  for (let k = 0; k < 12; k++) {
+    const off = (k % 2 ? 1 : -1) * Math.ceil(k / 2) * Math.PI / 6;
+    if (ok(o.a0 + off) && ok(o.a1 + off) && ok((o.a0 + o.a1) / 2 + off)) return { ...o, a0: o.a0 + off, a1: o.a1 + off };
+  }
+  return { ...o, r: o.r * 0.6 };
+}
 export function stopShot() { rig.cine = null; }
 function cinematic(dt) {
   const c = rig.cine;

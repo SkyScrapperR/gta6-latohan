@@ -28,7 +28,7 @@ function tick(dt) {
   const u = G.ui;
   for (const k of ['help', 'area', 'vehicleName', 'radioName']) if (u[k]) { u[k].t -= dt; if (u[k].t <= 0) u[k] = null; }
   for (let i = toasts.length - 1; i >= 0; i--) { toasts[i].t -= dt; if (toasts[i].t <= 0) toasts.splice(i, 1); }
-  if (G.mode !== 'cutscene') {
+  if (G.mode === 'playing') {
     if (banner) { banner.t -= dt; if (banner.t <= 0) banner = null; }
     if (!banner && queue.length) banner = queue.shift();
   }
@@ -52,7 +52,7 @@ export function draw(ctx, dt) {
     drawDamageDirs(ctx, s);
     if (G.mode === 'playing') drawCrosshair(ctx, s);
   }
-  if (G.mode !== 'cutscene') drawBanner(ctx, s);
+  if (G.mode === 'playing') drawBanner(ctx, s);
   if (G.mode === 'dead' || G.mode === 'busted') drawDownScreen(ctx, s);
 }
 
